@@ -1,4 +1,4 @@
-# User Managemnt 
+# User Management 
 
 ## Getting Started
 
