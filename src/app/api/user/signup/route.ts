@@ -1,4 +1,3 @@
-// import jwt from "jsonwebtoken"
 import connect from "@/dbConfig/connect"
 import { NextRequest,NextResponse } from "next/server"
 import User from "@/models/userModel"

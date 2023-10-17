@@ -1,5 +1,5 @@
 import { model,Schema ,models} from "mongoose";
-
+import jwt from "jsonwebtoken"
 const userSchema =new Schema({
     username:{
      type:String,
@@ -28,5 +28,18 @@ const userSchema =new Schema({
     verifyEmailExpiry:String,
 })
 
+userSchema.methods.generateToken =  function () {
+    if (!this._id || !this.username) {
+      throw new Error('User ID or username is undefined');
+    }
+    const token = jwt.sign({
+      id: this._id,
+      username: this.username
+    }, process.env.SECURE_PASS!, { expiresIn: '15m' });
+  
+    return token;
+  };
+
 const User = models.users || model("users", userSchema);
+
 export default User

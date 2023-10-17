@@ -1,11 +1,9 @@
 "use client"
 
-
+import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
-import { POST } from '../api/user/signup/route';
-import { json } from 'stream/consumers';
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -24,14 +22,18 @@ export default function Signup() {
 
   const handleSubmit = async(e:any) => {
     e.preventDefault();
-  
-      const response= (await fetch("http://localhost:3000/api/user/signup",{
-      method:'POST',body:JSON.stringify(formData)})).json()
-  
-    // router.push('/');
-    console.log(response);
-    
-    toast.success('Signup successful!',{duration:1000,position:'top-right'});
+      try {
+        const response= await(await fetch("http://localhost:3000/api/user/signup",{
+          method:'POST',body:JSON.stringify(formData)})).json()           
+          if(response?.success){
+            router.push("/login")
+            toast.success(response?.message,{duration:2000,position:'top-right'});
+            return
+            }  
+            toast.success(response?.error,{duration:2000,position:'top-right'});
+      } catch (error) {
+        toast.success('Something went wrong',{duration:2000,position:'top-right'});
+      }
   };
 
   return (
@@ -98,6 +100,11 @@ export default function Signup() {
             Sign Up
           </button>
         </form>
+        <Link href={"/login"} className='text-black'>
+        <div className='text-center w-full'>
+          Login
+          </div>
+        </Link>
       </div>
     </div>
   );
